@@ -4,8 +4,7 @@
 ## Часть 1. Valid Parentheses (LeetCode 20)
 
 **Код решения:**
-```
-python
+```python
 class Solution:
     def isValid(self, s: str) -> bool:
         stack = []
@@ -30,13 +29,10 @@ class Solution:
 
 Стек выбран потому, что закрывающая скобка всегда относится к последней открытой — это принцип LIFO (Last In, First Out). Мы проходим строку один раз: открывающие скобки кладем в стек (push), а для каждой закрывающей сверяем с вершиной и удаляем её (pop). Временная сложность O(n), так как каждый символ обрабатывается ровно один раз
 
-```
-```
 ## Часть 2. Implement Queue using Stacks (LeetCode 232)
 
 
-```
-python
+```python
 class MyQueue:
     def __init__(self):
         self.in_stack = []
@@ -69,14 +65,14 @@ class MyQueue:
 
 Очередь работает по принципу FIFO (первым пришел — первым ушел), а стек — LIFO. Для реализации очереди были использованы два стека in_stack для добавления элементов и out_stack для извлечения. При перекладывании порядок меняется на противоположный, и на вершине out_stack оказывается самый первый добавленный элемент.
 Сложность: push, empty — O(1). pop, peek — O(1).
-```
-```
+
 ## Часть 3. Работа с агентом
 Агенту Perplexity (веб-версия) был задан такой промт:
 "Реши задачу Valid Parentheses. Какую структуру данных выберешь и почему? Укажи временную и пространственную сложность"
 Агент предложил использовать стек (Stack) основываясь на том, что скобки должны закрываться в порядке, обратном их открытию, что (принцип LIFO). Оценка сложности от агента: O(n) по времени и O(n) по памяти.
 Решение задачки Valid Parentheses (LeetCode 20) агентом:
-```
+
+```python
 class Solution:
     def isValid(self, s: str) -> bool:
         pairs = {')': '(', '}': '{', ']': '['}
@@ -94,7 +90,7 @@ class Solution:
 
 ```
 далее агент выдал решение задачи Queue using Stacks (LeetCode 232)
-```
+```python
 class MyQueue:
     def __init__(self):
         self.in_stack = []
@@ -118,3 +114,4 @@ class MyQueue:
 
     def empty(self) -> bool:
         return not self.in_stack and not self.out_stack
+```
