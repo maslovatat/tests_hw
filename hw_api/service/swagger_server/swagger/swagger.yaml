@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Homework Tracker API
+  description: API для отслеживания дедлайнов по домашним заданиям.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+paths:
+  /tasks:
+    get:
+      summary: Получить список всех заданий
+      operationId: tasks_get
+      responses:
+        "200":
+          description: Успешный ответ со списком заданий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+                x-content-type: application/json
+        "401":
+          description: "Не авторизован (не знаю, кто ты)"
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+    post:
+      summary: Создать новое задание (дедлайн)
+      operationId: tasks_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTask"
+        required: true
+      responses:
+        "201":
+          description: Задание успешно создано
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "400":
+          description: "Некорректный запрос (например, не указан дедлайн)"
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+  /tasks/{id}:
+    get:
+      summary: Получить задание по ID
+      operationId: tasks_id_get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Задание с таким ID не найдено
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+    delete:
+      summary: Удалить задание
+      operationId: tasks_id_delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Успешно удалено
+        "403":
+          description: Запрещено
+        "404":
+          description: Задание не найдено
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+    patch:
+      summary: "Обновить статус задания (например, отметить выполненным)"
+      operationId: tasks_id_patch
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTask"
+        required: true
+      responses:
+        "200":
+          description: Успешно обновлено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "403":
+          description: "Запрещено (знаю, кто ты, но нельзя менять чужое задание)"
+        "404":
+          description: Задание не найдено
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          example: Сдать ДЗ 9 по разработке приложений
+        subject:
+          type: string
+          example: Разработка приложений
+        deadline:
+          type: string
+          format: date-time
+          example: 2026-11-11T23:59:00Z
+        isCompleted:
+          type: boolean
+          example: false
+      example:
+        subject: Разработка приложений
+        id: 0
+        title: Сдать ДЗ 9 по разработке приложений
+        deadline: 2026-11-11T23:59:00Z
+        isCompleted: false
+    NewTask:
+      required:
+      - deadline
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        subject:
+          type: string
+        deadline:
+          type: string
+          format: date-time
+    UpdateTask:
+      type: object
+      properties:
+        isCompleted:
+          type: boolean
+
